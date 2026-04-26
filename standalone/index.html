@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Master - Complete Practice Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🎯</span>
+                <span class="logo-text">Interview Master</span>
+            </div>
+            <div class="nav-center">
+                <a href="#" class="nav-link" data-page="home" onclick="return navigateTo('home')">Home</a>
+                <a href="#" class="nav-link" data-page="dashboard" onclick="return navigateTo('dashboard')" style="display:none;">Dashboard</a>
+                <a href="#" class="nav-link" data-page="interview" onclick="return navigateTo('interview')" style="display:none;">Interview</a>
+                <a href="#" class="nav-link" data-page="results" onclick="return navigateTo('results')" style="display:none;">Results</a>
+            </div>
+            <div class="nav-right">
+                <button class="btn-theme" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+                <div class="user-menu" id="userMenu" style="display:none;">
+                    <span id="userName">User</span>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                </div>
+                <button class="btn-auth" id="authBtn" onclick="navigateTo('login')">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container" id="main">
+        
+        <!-- HOME PAGE -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1>Master Any Interview 🚀</h1>
+                <p>Practice technical, HR, and behavioral interviews with AI-powered feedback and real-time analytics.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="navigateTo('login')">Start Practicing</button>
+                    <button class="btn btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+                </div>
+            </div>
+
+            <div class="features" id="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Powered Feedback</h3>
+                    <p>Get intelligent scoring on relevance, clarity, and technical accuracy</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Performance Analytics</h3>
+                    <p>Track improvement with detailed charts and progress metrics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Timed Practice</h3>
+                    <p>Simulate real interviews with accurate time constraints</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Adaptive Difficulty</h3>
+                    <p>Questions adjust based on your performance level</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Multiple Interview Types</h3>
+                    <p>Technical, HR, behavioral, and role-specific interviews</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Practice Anywhere</h3>
+                    <p>Works on any device - no installation needed</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOGIN PAGE -->
+        <section id="login" class="page">
+            <div class="auth-container">
+                <h2>Login to Your Account</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p class="auth-toggle">Don't have an account? <a href="#" onclick="return navigateTo('signup')">Sign up</a></p>
+                <div class="demo-login">
+                    <p style="font-size: 0.9rem; color: #666;">Demo: email@test.com / password</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIGNUP PAGE -->
+        <section id="signup" class="page">
+            <div class="auth-container">
+                <h2>Create Your Account</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signupName" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select id="signupRole">
+                            <option value="frontend">Frontend Developer</option>
+                            <option value="backend">Backend Developer</option>
+                            <option value="fullstack">Full Stack Developer</option>
+                            <option value="ai_ml">AI/ML Engineer</option>
+                            <option value="devops">DevOps Engineer</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </form>
+                <p class="auth-toggle">Already have an account? <a href="#" onclick="return navigateTo('login')">Login</a></p>
+            </div>
+        </section>
+
+        <!-- DASHBOARD PAGE -->
+        <section id="dashboard" class="page">
+            <h2>Your Dashboard</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalInterviews">0</div>
+                    <div class="stat-label">Total Interviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgScore">85</div>
+                    <div class="stat-label">Average Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="topicsMastered">3</div>
+                    <div class="stat-label">Topics Mastered</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="chart-card">
+                    <h3>Score Progress</h3>
+                    <canvas id="scoreChart" width="400" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Topics Performance</h3>
+                    <div id="topicsChart" class="topics-chart"></div>
+                </div>
+            </div>
+
+            <div class="action-cards">
+                <div class="action-card">
+                    <h3>📋 Start New Interview</h3>
+                    <p>Practice a timed mock interview</p>
+                    <button class="btn btn-primary" onclick="navigateTo('interview')">Begin</button>
+                </div>
+                <div class="action-card">
+                    <h3>📚 View History</h3>
+                    <p>Review your past sessions</p>
+                    <button class="btn btn-secondary" onclick="showHistory()">View</button>
+                </div>
+                <div class="action-card">
+                    <h3>🎯 Weak Topics</h3>
+                    <p>Focus on areas that need improvement</p>
+                    <button class="btn btn-secondary" onclick="showWeakTopics()">Analyze</button>
+                </div>
+            </div>
+
+            <div id="historyModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h3>Interview History</h3>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERVIEW PAGE -->
+        <section id="interview" class="page">
+            <div class="interview-header">
+                <h2>Mock Interview Session</h2>
+                <div class="interview-info">
+                    <span>Question <span id="questionNumber">1</span> of <span id="totalQuestions">5</span></span>
+                    <span id="timerDisplay" class="timer">5:00</span>
+                </div>
+            </div>
+
+            <div class="interview-controls">
+                <div class="control-group">
+                    <label>Interview Type:</label>
+                    <select id="interviewType" onchange="updateQuestions()">
+                        <option value="technical">Technical</option>
+                        <option value="hr">HR / Behavioral</option>
+                        <option value="system-design">System Design</option>
+                        <option value="frontend">Frontend Engineering</option>
+                        <option value="backend">Backend Engineering</option>
+                        <option value="devops">DevOps & Cloud</option>
+                        <option value="data-science">Data Science & AI</option>
+                        <option value="product">Product Management</option>
+                        <option value="leadership">Engineering Leadership</option>
+                        <option value="security">Cybersecurity</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Difficulty:</label>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Role:</label>
+                    <select id="role">
+                        <option value="frontend">Frontend</option>
+                        <option value="backend" selected>Backend</option>
+                        <option value="fullstack">Full Stack</option>
+                        <option value="ai_ml">AI/ML</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="startNewInterview()">Start Interview</button>
+            </div>
+
+            <div id="interviewContent" style="display:none;">
+                <div class="question-box">
+                    <div class="question-tag" id="questionTag">Technical</div>
+                    <h3 id="questionText">Question will appear here</h3>
+                    <div class="question-meta">
+                        <span id="questionDifficulty">Medium</span>
+                        <span id="questionCategory">Category</span>
+                    </div>
+                </div>
+
+                <div class="answer-section">
+                    <label for="answerInput">Your Answer:</label>
+                    <textarea id="answerInput" placeholder="Type your answer here... Think out loud and explain your reasoning." rows="10"></textarea>
+                    <div class="answer-actions">
+                        <button class="btn btn-secondary" onclick="skipQuestion()">Skip</button>
+                        <button class="btn btn-primary" onclick="submitAnswer()">Submit Answer</button>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTS PAGE -->
+        <section id="results" class="page">
+            <div class="results-container">
+                <h2>Session Complete!</h2>
+                
+                <div class="results-score">
+                    <div class="score-circle" id="scoreCircle">85</div>
+                    <p id="scoreMessage">Excellent performance!</p>
+                </div>
+
+                <div class="results-stats">
+                    <div class="result-stat">
+                        <h4>Questions Answered</h4>
+                        <p id="questionsAnswered">5</p>
+                    </div>
+                    <div class="result-stat">
+                        <h4>Average Score</h4>
+                        <p id="averageScore">85</p>
+                    </div>
+                    <div class="result-stat">
+                        <h4>Time Taken</h4>
+                        <p id="timeTaken">12:34</p>
+                    </div>
+                    <div class="result-stat">
+                        <h4>Accuracy</h4>
+                        <p id="accuracyResult">82%</p>
+                    </div>
+                </div>
+
+                <div class="results-feedback">
+                    <h3>Session Summary</h3>
+                    <div id="resultsSummary"></div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn btn-primary" onclick="navigateTo('interview')">Practice Again</button>
+                    <button class="btn btn-secondary" onclick="navigateTo('dashboard')">View Dashboard</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Interview Master. Practice, Learn, Succeed.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

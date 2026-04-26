@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: ai-interview-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: ai_interview_platform
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ai-interview-backend
+    ports:
+      - "4000:4000"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ai_interview_platform
+      JWT_SECRET: docker_secret_key_123
+      NODE_ENV: development
+      PORT: 4000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./server:/app/server
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: ai-interview-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app/client
+    command: npm run dev
+
+volumes:
+  mongo_data:
+    driver: local

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Prep - Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="navigate('home')">AI Interview Pro</a>
+            <div class="nav-links">
+                <button id="darkToggle" class="btn-small" onclick="toggleDarkMode()">Dark</button>
+                <a href="#" id="navHome" onclick="navigate('home'); return false;">Home</a>
+                <span id="authNav" style="display: none;">
+                    <a href="#" onclick="navigate('dashboard'); return false;">Dashboard</a>
+                    <a href="#" onclick="navigate('interview'); return false;">Interview</a>
+                    <a href="#" onclick="navigate('profile'); return false;">Profile</a>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                </span>
+                <span id="guestNav">
+                    <a href="#" onclick="navigate('login'); return false;">Login</a>
+                    <a href="#" onclick="navigate('signup'); return false;">Sign Up</a>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" id="app">
+        <!-- Home Page -->
+        <div id="home-page" class="page">
+            <section class="hero">
+                <h1>AI-Powered Interview Preparation. Practice like a pro.</h1>
+                <p>Dynamic technical and HR mock interviews, AI feedback, performance analytics, and resume-based personalization.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="navigate('signup')">Get started</button>
+                    <button class="btn-secondary" onclick="navigate('dashboard')">Live demo</button>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature-card">
+                    <h3>Adaptive Interview</h3>
+                    <p>Difficulty adjusts automatically based on your performance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>AI Evaluation</h3>
+                    <p>Get detailed scoring on relevance, clarity, and accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Resume IQ</h3>
+                    <p>Upload your resume for personalized questions.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page" style="display: none;">
+            <div class="auth-form">
+                <h2>Login</h2>
+                <form onsubmit="handleLogin(event)">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <div id="loginError" class="error"></div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                <p>No account? <a href="#" onclick="navigate('signup'); return false;">Sign up here</a></p>
+            </div>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signup-page" class="page" style="display: none;">
+            <div class="auth-form">
+                <h2>Sign Up</h2>
+                <form onsubmit="handleSignup(event)">
+                    <input type="text" id="signupName" placeholder="Name" required>
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                    <select id="signupRole">
+                        <option value="general">General</option>
+                        <option value="frontend">Frontend</option>
+                        <option value="backend">Backend</option>
+                        <option value="ai_ml">AI/ML</option>
+                    </select>
+                    <div id="signupError" class="error"></div>
+                    <button type="submit" class="btn-primary">Create account</button>
+                </form>
+                <p>Already have an account? <a href="#" onclick="navigate('login'); return false;">Login here</a></p>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page" style="display: none;">
+            <h1>Dashboard</h1>
+            <div id="dashboardLoading" style="text-align: center; padding: 2rem;">Loading...</div>
+            <div id="dashboardContent" style="display: none;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <p class="stat-label">Interview Sessions</p>
+                        <h2 id="statInterviews">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Average Score</p>
+                        <h2 id="statAvgScore">0</h2>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Weak Topics</p>
+                        <h2 id="statWeakTopics">0</h2>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Score Trend</h3>
+                        <canvas id="trendChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Weak Topics</h3>
+                        <canvas id="weakTopicsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="recommendations-card">
+                    <h3>Personalized Recommendations</h3>
+                    <ul>
+                        <li>Practice more on topics with scores below 70.</li>
+                        <li>Try a timed mock interview to improve speed and clarity.</li>
+                        <li>Upload your resume for tailored questions.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Page -->
+        <div id="interview-page" class="page" style="display: none;">
+            <h1>Mock Interview</h1>
+            <div class="interview-container">
+                <div class="interview-main">
+                    <div class="interview-controls">
+                        <select id="interviewMode" onchange="updateInterviewMode()">
+                            <option value="technical">Technical</option>
+                            <option value="hr">HR</option>
+                            <option value="role_based">Role-based</option>
+                        </select>
+                        <select id="interviewTopic">
+                            <option value="technical">DSA</option>
+                            <option value="dbms">DBMS</option>
+                            <option value="os">OS</option>
+                            <option value="cn">CN</option>
+                            <option value="behavioral">Behavioral</option>
+                        </select>
+                        <select id="interviewRole">
+                            <option value="general">General</option>
+                            <option value="frontend">Frontend</option>
+                            <option value="backend">Backend</option>
+                            <option value="ai_ml">AI/ML</option>
+                        </select>
+                        <select id="interviewDifficulty">
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                        <button class="btn-primary" onclick="generateQuestion()">Next question</button>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-meta">Question <span id="questionNum">1</span></div>
+                        <div id="questionText" class="question-text">Loading question...</div>
+                        <div id="questionInfo" class="question-info"></div>
+                    </div>
+
+                    <textarea id="answerInput" rows="8" placeholder="Type your answer..."></textarea>
+
+                    <div class="interview-actions">
+                        <button class="btn-primary" onclick="submitAnswer()">Submit</button>
+                        <span id="timerDisplay" class="timer">Time left: 60s</span>
+                    </div>
+
+                    <div id="feedbackSection" style="display: none;" class="feedback-card">
+                        <h4>AI Feedback</h4>
+                        <div id="feedbackContent"></div>
+                    </div>
+                </div>
+
+                <div class="interview-sidebar">
+                    <h3>Session Summary</h3>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page" style="display: none;">
+            <h1>Profile</h1>
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h3>Account</h3>
+                    <p>Name: <span id="profileName">-</span></p>
+                    <p>Email: <span id="profileEmail">-</span></p>
+                    <p>Role: <span id="profileRole">-</span></p>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Progress</h3>
+                    <p>Current streak: <span id="profileStreak">0</span></p>
+                    <p>Badges: <span id="profileBadges">None</span></p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h3>Suggested Topics</h3>
+                <ul id="suggestedTopics">
+                    <li>Graph Algorithms</li>
+                    <li>System Design</li>
+                    <li>Cloud Architecture</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
